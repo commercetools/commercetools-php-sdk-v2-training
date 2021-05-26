@@ -1,0 +1,16 @@
+{
+    "name": "commercetools/training",
+    "scripts": {
+        "1": "php src/task1-project-setup.php",
+        "2": "php src/task2-customers.php",
+        "4a": "php src/task4a-states.php",
+        "4b": "php src/task4b-checkout.php",
+        "6a": "php src/task6a-search.php",
+        "6b": "php src/task6b-pagination.php",
+        "6c": "php src/task6c-graphql.php"
+    },
+    "require": {
+        "commercetools/commercetools-sdk": "^3.0",
+        "vlucas/phpdotenv": "^5.3"
+    }
+}

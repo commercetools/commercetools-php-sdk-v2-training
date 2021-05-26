@@ -1,0 +1,11 @@
+cache
+credentials.ini
+var/logs
+var/sessions
+parameters.yml
+composer.lock
+.vagrant
+parameters.env
+vendor
+.idea
+.env
