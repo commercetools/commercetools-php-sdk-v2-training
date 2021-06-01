@@ -35,9 +35,31 @@ class ClientService {
         }
         return self::$client;
     }
+    public function getImportClient(){
+        if (is_null(self::$client)) {
+            $clientId = $_ENV['CTP_CLIENT_ID'] ?? '';
+            $clientSecret = $_ENV['CTP_CLIENT_SECRET'] ?? '';
+            self::$projectKey = $_ENV['CTP_PROJECT'] ?? '';
+            $authConfig = new ClientCredentialsConfig(new ClientCredentials($clientId, $clientSecret));
+
+            $client = ClientFactory::of()->createGuzzleClient(
+                new \Commercetools\Import\Client\Config(),
+                $authConfig
+            );
+            self::$client = $client;
+
+        }
+        return self::$client;
+    }
     public function getApiBuilder()
     {
         $client = $this->getApiClient();
         return new ApiRequestBuilder(self::$projectKey, $client);
     }
+    public function getImportBuilder()
+    {
+        $client = $this->getImportClient();
+        return new ImportRequestBuilder(self::$projectKey, $client);
+    }
+    
 }

@@ -3,6 +3,7 @@
     "scripts": {
         "1": "php src/task1-project-setup.php",
         "2": "php src/task2-customers.php",
+        "3": "php src/task3-import.php",
         "4a": "php src/task4a-states.php",
         "4b": "php src/task4b-checkout.php",
         "6a": "php src/task6a-search.php",
