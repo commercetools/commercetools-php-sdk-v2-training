@@ -11,10 +11,10 @@ use Commercetools\Import\Models\Productdrafts\PriceDraftImportBuilder;
 use Commercetools\Import\Models\Productdrafts\PriceDraftImportCollection;
 use Commercetools\Import\Models\Importrequests\ProductDraftImportRequestBuilder;
 use Commercetools\Import\Models\Importrequests\ProductDraftImportRequestCollection;
+use Commercetools\Import\Models\ImportOperationBuilder;
 
-use Commercetools\Api\Models\Common\CentPrecisionMoneyDraftBuilder;
 
-use Commercetools\Import\Models\Common\TypedMoneyBuilder;
+use Commercetools\Import\Models\Common\MoneyBuilder;
 use Commercetools\Import\Models\Common\ImageCollection;
 use Commercetools\Import\Models\Common\ImageBuilder;
 use Commercetools\Import\Models\Common\LocalizedStringBuilder;
@@ -29,26 +29,26 @@ include 'clientService.php';
 class ImportService extends ClientService
 {
 
-    public function createImportSink()
+    public function createImportSink($sinkKey,$type)
     {
 
         $builder = $this->getImportBuilder();
         $response = $builder->with()->importSinks()->post(
-            ImportSinkDraftBuilder::of()->withKey('ff-testSink')->withResourceType('product-draft')->build()
+            ImportSinkDraftBuilder::of()->withKey($sinkKey)->withResourceType($type)->build()
         )->execute();
         return $response;
     }
 
-    //not yet finished
-    public function checkImportSinkOperationStatusWithId($importSinkKey, $operationId)
+    
+    public function checkImportSinkOperationStatusWithId($sinkKey, $operationId)
     {
 
         $builder = $this->getImportBuilder();
-        $request = $builder->with()->customers()->get();
+        $request = $builder->with()->productDrafts()->importSinkKeyWithImportSinkKeyValue($sinkKey)->importOperations()->withIdValue($operationId)->get();
         $response = $request->execute();
         return $response;
     }
-    public function importProducts()
+    public function importProducts($sinkKey)
     {
         //productDraftImportBuilder
         //productDraftImportCollection
@@ -59,7 +59,7 @@ class ImportService extends ClientService
         $productDraftImportRequest= ProductDraftImportRequestBuilder::of()->withResources($productDraftImportCollection)->build();
         $ProductDraftImportRequestCollection = ProductDraftImportRequestCollection::of()->add($productDraftImportRequest);
         $builder = $this->getImportBuilder();
-        $response = $builder->with()->productDrafts()->importSinkKeyWithImportSinkKeyValue('ff-testSink')->post($productDraftImportRequest)->execute();
+        $response = $builder->with()->productDrafts()->importSinkKeyWithImportSinkKeyValue($sinkKey)->post($productDraftImportRequest)->execute();
         return $response;
 
     }
@@ -92,7 +92,7 @@ class ImportService extends ClientService
                         ->withPrices(
                             PriceDraftImportCollection::of()->add(
                                 PriceDraftImportBuilder::of()
-                                ->withValue(TypedMoneyBuilder::of()
+                                ->withValue(MoneyBuilder::of()
                                             ->withCentAmount($productDataArray[$x][6])
                                             ->withCurrencyCode($productDataArray[$x][7])
                                             ->build()
