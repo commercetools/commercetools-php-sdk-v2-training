@@ -17,26 +17,35 @@ include 'services/customerService.php';
 
 print_r(addCustomerToCustomerGroup());
 
-function createCustomer(){
+function createCustomer()
+{
     $customerService = new customerService();
     $email='ff-test1@test.com';
    
     $password='123';
     $builder = CustomerDraftBuilder::of();
     $draft = $builder->withEmail($email)->withPassword($password)->build();
+
     return $customerService->createCustomer($draft);
 }
-function getAllCustomers(){
+
+function getAllCustomers()
+{
     $customerService = new customerService();
+
     return $customerService->getAllCustomers();
 }
-function getCustomerWithId(){
+
+function getCustomerWithId()
+{
     $customerService = new customerService();
     $id = 'a0db8293-38ee-42a8-a7c9-ab8c6b627baa';
 
     return $customerService->getCustomerWithId($id);
 }
-function updateCustomerFirstName(){
+
+function updateCustomerFirstName()
+{
     $customerService = new customerService();
     $id = 'a0db8293-38ee-42a8-a7c9-ab8c6b627baa';
     $name = 'fady';
@@ -45,7 +54,9 @@ function updateCustomerFirstName(){
 
     return $customerService->updateCustomer($actionCollection, $id);
 }
-function addCustomerToCustomerGroup(){
+
+function addCustomerToCustomerGroup()
+{
     $customerService = new customerService();
     $id = 'a0db8293-38ee-42a8-a7c9-ab8c6b627baa';
     $customerGroupKey = 'testCustomerGroup123';

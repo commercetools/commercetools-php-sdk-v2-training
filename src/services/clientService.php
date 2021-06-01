@@ -19,7 +19,8 @@ class ClientService {
     private static $client;
     private static $projectKey;
 
-    public function getApiClient(){
+    public function getApiClient()
+    {
         if (is_null(self::$client)) {
             $clientId = $_ENV['CTP_CLIENT_ID'] ?? '';
             $clientSecret = $_ENV['CTP_CLIENT_SECRET'] ?? '';
