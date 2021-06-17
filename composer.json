@@ -8,7 +8,9 @@
         "4b": "php src/task4b-checkout.php",
         "6a": "php src/task6a-search.php",
         "6b": "php src/task6b-pagination.php",
-        "6c": "php src/task6c-graphql.php"
+        "6c": "php src/task6c-graphql.php",
+        "7": "php src/task7-extensions.php",
+        "8": "php src/task8-subscriptions.php"
     },
     "require": {
         "commercetools/commercetools-sdk": "^3.0",
