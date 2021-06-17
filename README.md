@@ -15,7 +15,8 @@ then follow your trainer instructions to solve the exercises.
 use the command `composer install` to install dependencies
 
 then you should be able to run any file using composer [fileNumber]
-example. 
+example.   
+
 `composer 1`  
 `composer 4c`  
 `composer 6b`
