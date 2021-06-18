@@ -30,11 +30,6 @@ class GraphqlService extends ClientService
             }
           }';
 
-        $builder = $this->getApiBuilder();
-        $gqlRequest = GraphQLRequestBuilder::of()->withQuery($query)->build();
-        $request = $builder->with()->graphql()->post($gqlRequest);
-        $response = $request->execute();
-
-        return $response;
+       
     }
 }

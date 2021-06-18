@@ -15,7 +15,7 @@ use Commercetools\Api\Client\ApiRequestBuilder;
 include 'services/customerService.php';
 
 
-print_r(addCustomerToCustomerGroup());
+print_r(createCustomer());
 
 function createCustomer()
 {
@@ -23,8 +23,7 @@ function createCustomer()
     $email='ff-test1@test.com';
    
     $password='123';
-    $builder = CustomerDraftBuilder::of();
-    $draft = $builder->withEmail($email)->withPassword($password)->build();
+    $draft;
 
     return $customerService->createCustomer($draft);
 }
@@ -49,8 +48,8 @@ function updateCustomerFirstName()
     $customerService = new customerService();
     $id = 'a0db8293-38ee-42a8-a7c9-ab8c6b627baa';
     $name = 'fady';
-    $action = CustomerSetFirstNameActionBuilder::of()->withFirstName($name)->build();
-    $actionCollection = CustomerUpdateActionCollection::of()->add($action);
+    
+    $actionCollection;
 
     return $customerService->updateCustomer($actionCollection, $id);
 }
@@ -61,9 +60,8 @@ function addCustomerToCustomerGroup()
     $id = 'a0db8293-38ee-42a8-a7c9-ab8c6b627baa';
     $customerGroupKey = 'testCustomerGroup123';
     
-    $action = CustomerSetCustomerGroupActionBuilder::of()
-    ->withCustomerGroup(CustomerGroupResourceIdentifierBuilder::of()->withKey($customerGroupKey)->build())->build();
-    $actionCollection = CustomerUpdateActionCollection::of()->add($action);
+   
+    $actionCollection;
 
     return $customerService->updateCustomer($actionCollection, $id);
 }

@@ -32,35 +32,17 @@ class ImportService extends ClientService
     public function createImportSink($sinkKey,$type)
     {
 
-        $builder = $this->getImportBuilder();
-        $response = $builder->with()->importSinks()->post(
-            ImportSinkDraftBuilder::of()->withKey($sinkKey)->withResourceType($type)->build()
-        )->execute();
-        return $response;
+       
     }
 
     
     public function checkImportSinkOperationStatusWithId($sinkKey, $operationId)
     {
 
-        $builder = $this->getImportBuilder();
-        $request = $builder->with()->productDrafts()->importSinkKeyWithImportSinkKeyValue($sinkKey)->importOperations()->withIdValue($operationId)->get();
-        $response = $request->execute();
-        return $response;
+        
     }
     public function importProducts($sinkKey)
     {
-        //productDraftImportBuilder
-        //productDraftImportCollection
-        //ProductDraftImportRequestBuilder
-        //ProductDraftImportRequestCollection
-        //ProductDraftImportRequest via clientBuilder
-        $productDraftImportCollection = $this->createImportProductDraftCollection();
-        $productDraftImportRequest= ProductDraftImportRequestBuilder::of()->withResources($productDraftImportCollection)->build();
-        $ProductDraftImportRequestCollection = ProductDraftImportRequestCollection::of()->add($productDraftImportRequest);
-        $builder = $this->getImportBuilder();
-        $response = $builder->with()->productDrafts()->importSinkKeyWithImportSinkKeyValue($sinkKey)->post($productDraftImportRequest)->execute();
-        return $response;
 
     }
     public function createImportProductDraftCollection()

@@ -22,7 +22,7 @@ use Commercetools\Api\Models\Customer\CustomerSigninBuilder;
 include 'services/checkoutService.php';
 
 
-print_r(cartMergingSimulation());
+print_r(createCart());
 
 function createCart()
 {
@@ -31,11 +31,8 @@ function createCart()
     $countryCode='DE';
     $customerId='10cb16bf-a5d8-4f47-b664-fe5cae2f75d0';
 
-    $builder = CartDraftBuilder::of();
-    $draft = $builder->withCurrency($currency)
-    ->withCustomerId($customerId)
-    ->withShippingAddress(BaseAddressBuilder::of()->withCountry($countryCode)->build())
-    ->build();
+    
+    $draft ;
 
     return $checkoutService->createCart($draft);
 }
@@ -51,10 +48,7 @@ function addLineItemsToCart($arrayOfSkus,$cartId)
 {
     $checkoutService = new CheckoutService();
     $actionCollection = CartUpdateActionCollection::of();
-    foreach ($arrayOfSkus as $sku) {
-        $action = CartAddLineItemActionBuilder::of()->withSku($sku)->build();
-        $actionCollection = $actionCollection->add($action);
-    }
+   
 
     return $checkoutService->updateCart($actionCollection,$cartId);
 }
@@ -63,9 +57,8 @@ function addDiscountCodeToCart($code,$cartId)
 {
     $checkoutService = new CheckoutService();
     $actionCollection = CartUpdateActionCollection::of();
-   
-        $action = CartAddDiscountCodeActionBuilder::of()->withCode($code)->build();
-        $actionCollection = $actionCollection->add($action);
+
+       
     
 
     return $checkoutService->updateCart($actionCollection,$cartId);
@@ -76,10 +69,7 @@ function createOrderFromCart($cartId)
     $checkoutService = new CheckoutService();
     $cart = $checkoutService->getCartById($cartId);
     
-    $builder = OrderFromCartDraftBuilder::of();
-    $draft = $builder->withCart(CartResourceIdentifierBuilder::of()->withId($cartId)->build())
-    ->withVersion($cart->getVersion())
-    ->build();
+    $draft;
 
     return $checkoutService->createOrderFromCart($draft);
 }
@@ -96,8 +86,6 @@ function updateOrderStatus($state,$orderId)
     $checkoutService = new CheckoutService();
     $actionCollection = OrderUpdateActionCollection::of();
 
-        $action = OrderChangeOrderStateActionBuilder::of()->withOrderState($state)->build();
-        $actionCollection = $actionCollection->add($action);
     
 
     return $checkoutService->updateOrder($actionCollection,$orderId);
@@ -110,16 +98,7 @@ function createPayment()
     $amount='4200';
     $customerId='10cb16bf-a5d8-4f47-b664-fe5cae2f75d0';
 
-    $builder = PaymentDraftBuilder::of();
-    $draft = $builder
-    ->withCustomer(
-        CustomerResourceIdentifierBuilder::of()->withId($customerId)->build()
-    )
-    ->withAmountPlanned(
-        MoneyBuilder::of()->withCentAmount($amount)
-        ->withCurrencyCode($currency)->build()
-    )
-    ->build();
+    $draft ;
 
     return $checkoutService->createPayment($draft);
 }
@@ -128,13 +107,8 @@ function addPaymentToOrder($paymentId,$orderId)
     $checkoutService = new CheckoutService();
     $actionCollection = OrderUpdateActionCollection::of();
     
-        $action = OrderAddPaymentActionBuilder::of()
-        ->withPayment(
-            PaymentResourceIdentifierBuilder::of()
-            ->withId($paymentId)->build()
-        )
-        ->build();
-        $actionCollection = $actionCollection->add($action);
+       
+    
     
 
     return $checkoutService->updateOrder($actionCollection,$orderId);
@@ -161,10 +135,8 @@ function createAnonymousCart()
     $currency='EUR';
     $countryCode='DE';
 
-    $builder = CartDraftBuilder::of();
-    $draft = $builder->withCurrency($currency)
-    ->withShippingAddress(BaseAddressBuilder::of()->withCountry($countryCode)->build())
-    ->build();
+    
+    $draft ;
 
     return $checkoutService->createCart($draft);
 }

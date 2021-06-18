@@ -17,23 +17,7 @@ print_r(createNewSubscription());
 function createNewSubscription()
 {
     $SubscriptionService = new SubscriptionService();
-    $draft = SubscriptionDraftBuilder::of()
-             ->withKey('subscriptionSample')
-             ->withDestination(
-                GoogleCloudPubSubDestinationBuilder::of()
-                ->withProjectId('ct-support')
-                ->withTopic('training-subscription-sample')
-                ->build()
-             )
-             ->withMessages(
-                MessageSubscriptionCollection::of()->add(
-                    MessageSubscriptionBuilder::of()
-                    ->withResourceTypeId('order')
-                    ->withTypes(['OrderCreated'])
-                    ->build()
-                )
-             )
-             ->build();
+    $draft;
     return $SubscriptionService->createSubscription($draft);
 }
 
