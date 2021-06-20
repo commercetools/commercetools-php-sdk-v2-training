@@ -6,6 +6,7 @@
         "3": "php src/task3-import.php",
         "4a": "php src/task4a-states.php",
         "4b": "php src/task4b-checkout.php",
+        "5": "php src/task5-stores.php",
         "6a": "php src/task6a-search.php",
         "6b": "php src/task6b-pagination.php",
         "6c": "php src/task6c-graphql.php",
