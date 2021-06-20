@@ -52,6 +52,23 @@ class ClientService {
         }
         return self::$client;
     }
+    public function getStoreClient()
+    {
+        if (is_null(self::$client)) {
+            $clientId = $_ENV['CTP_STORE_ID'] ?? '';
+            $clientSecret = $_ENV['CTP_STORE_SECRET'] ?? '';
+            self::$projectKey = $_ENV['CTP_PROJECT'] ?? '';
+            $authConfig = new ClientCredentialsConfig(new ClientCredentials($clientId, $clientSecret));
+
+            $client = ClientFactory::of()->createGuzzleClient(
+                new Config(),
+                $authConfig
+            );
+            self::$client = $client;
+
+        }
+        return self::$client;
+    }
     public function getApiBuilder()
     {
         $client = $this->getApiClient();
@@ -61,6 +78,11 @@ class ClientService {
     {
         $client = $this->getImportClient();
         return new ImportRequestBuilder(self::$projectKey, $client);
+    }
+    public function getStoreBuilder()
+    {
+        $client = $this->getStoreClient();
+        return new ApiRequestBuilder(self::$projectKey, $client);
     }
     
 }
