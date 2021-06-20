@@ -2,7 +2,6 @@
 
 namespace Commercetools\Training;
 
-use Commercetools\Api\Models\State\StateUpdateBuilder;
 include 'clientService.php';
 
 
