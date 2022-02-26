@@ -1,8 +1,9 @@
 <?php
 
 namespace Commercetools\Training;
-use Commercetools\Import\Models\Importsinks\ImportSink;
-use Commercetools\Import\Models\Importsinks\ImportSinkDraftBuilder;
+use Commercetools\Import\Models\Importcontainers\ImportContainer;
+use Commercetools\Import\Models\Importcontainers\ImportContainerDraftBuilder;
+
 use Commercetools\Import\Models\Productdrafts\ProductDraftImportBuilder;
 use Commercetools\Import\Models\Productdrafts\ProductDraftImportCollection;
 use Commercetools\Import\Models\Productdrafts\ProductVariantDraftImportBuilder;
@@ -29,26 +30,26 @@ include 'clientService.php';
 class ImportService extends ClientService
 {
 
-    public function createImportSink($sinkKey,$type)
+    public function createImportContainer($containerKey)
     {
 
         $builder = $this->getImportBuilder();
-        $response = $builder->with()->importSinks()->post(
-            ImportSinkDraftBuilder::of()->withKey($sinkKey)->withResourceType($type)->build()
+        $response = $builder->with()->importContainers()->post(
+            ImportContainerDraftBuilder::of()->withKey($containerKey)->build()
         )->execute();
         return $response;
     }
 
     
-    public function checkImportSinkOperationStatusWithId($sinkKey, $operationId)
+    public function checkImportSummary($containerKey)
     {
 
         $builder = $this->getImportBuilder();
-        $request = $builder->with()->productDrafts()->importSinkKeyWithImportSinkKeyValue($sinkKey)->importOperations()->withIdValue($operationId)->get();
+        $request = $builder->with()->importContainers()->withImportContainerKeyValue($containerKey)->importSummaries()->get();
         $response = $request->execute();
         return $response;
     }
-    public function importProducts($sinkKey)
+    public function importProducts($containerKey)
     {
         //productDraftImportBuilder
         //productDraftImportCollection
@@ -57,9 +58,9 @@ class ImportService extends ClientService
         //ProductDraftImportRequest via clientBuilder
         $productDraftImportCollection = $this->createImportProductDraftCollection();
         $productDraftImportRequest= ProductDraftImportRequestBuilder::of()->withResources($productDraftImportCollection)->build();
-        $ProductDraftImportRequestCollection = ProductDraftImportRequestCollection::of()->add($productDraftImportRequest);
         $builder = $this->getImportBuilder();
-        $response = $builder->with()->productDrafts()->importSinkKeyWithImportSinkKeyValue($sinkKey)->post($productDraftImportRequest)->execute();
+        $response = $builder->with()->productDrafts()->importContainers()->withImportContainerKeyValue($containerKey)->post($productDraftImportRequest)->execute();
+       
         return $response;
 
     }
