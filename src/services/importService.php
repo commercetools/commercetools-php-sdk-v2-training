@@ -1,8 +1,9 @@
 <?php
 
 namespace Commercetools\Training;
-use Commercetools\Import\Models\Importsinks\ImportSink;
-use Commercetools\Import\Models\Importsinks\ImportSinkDraftBuilder;
+use Commercetools\Import\Models\Importcontainers\ImportContainer;
+use Commercetools\Import\Models\Importcontainers\ImportContainerDraftBuilder;
+
 use Commercetools\Import\Models\Productdrafts\ProductDraftImportBuilder;
 use Commercetools\Import\Models\Productdrafts\ProductDraftImportCollection;
 use Commercetools\Import\Models\Productdrafts\ProductVariantDraftImportBuilder;
