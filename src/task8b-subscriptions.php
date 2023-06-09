@@ -8,17 +8,18 @@ use Commercetools\Api\Models\Subscription\MessageSubscriptionBuilder;
 use Commercetools\Api\Models\Subscription\GoogleCloudPubSubDestinationBuilder;
 
 
-
-include 'services/subscriptionService.php';
+include 'services/customizationService.php';
 
 
 print_r(createNewSubscription());
 
+
+
 function createNewSubscription()
 {
-    $SubscriptionService = new SubscriptionService();
+    $CustomizationService = new CustomizationService();
     $draft = SubscriptionDraftBuilder::of()
-             ->withKey('subscriptionSample')
+             ->withKey('nd-subscriptionSample')
              ->withDestination(
                 GoogleCloudPubSubDestinationBuilder::of()
                 ->withProjectId('ct-support')
@@ -34,6 +35,6 @@ function createNewSubscription()
                 )
              )
              ->build();
-    return $SubscriptionService->createSubscription($draft);
+    return $CustomizationService->createSubscription($draft);
 }
 

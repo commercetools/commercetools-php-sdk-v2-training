@@ -11,6 +11,23 @@ function getCustomersWithOrders()
 {
     $GraphqlService = new GraphqlService();
 
-    return $GraphqlService->getCustomersWithOrders();
+    $query = 'query {
+        orders {
+          results {
+            customer {
+              email
+            }
+            lineItems {
+              nameAllLocales {
+                value
+              }
+            }
+            totalPrice {
+              centAmount
+            }
+          }
+        }
+      }';
+    return $GraphqlService->postGraphQlQuery($query);
 }
 

@@ -1,19 +1,22 @@
 {
     "name": "commercetools/training",
     "scripts": {
-        "1": "php src/task1-project-setup.php",
-        "2": "php src/task2-customers.php",
-        "3": "php src/task3-import.php",
+        "1a": "php src/task1-project-setup.php",
+        "2a": "php src/task2a-customers.php",
+        "3a": "php src/task3a-import.php",
         "4a": "php src/task4a-states.php",
         "4b": "php src/task4b-checkout.php",
+        "5a": "php src/task5a-stores.php",
         "6a": "php src/task6a-search.php",
         "6b": "php src/task6b-pagination.php",
         "6c": "php src/task6c-graphql.php",
-        "7": "php src/task7-extensions.php",
-        "8": "php src/task8-subscriptions.php"
+        "7a": "php src/task7a-types.php",
+        "7b": "php src/task7b-custom-objects.php",
+        "8a": "php src/task8a-extensions.php",
+        "8b": "php src/task8b-subscriptions.php"
     },
     "require": {
-        "commercetools/commercetools-sdk": "^3.0",
+        "commercetools/commercetools-sdk": "^9.5",
         "vlucas/phpdotenv": "^5.3"
     }
 }

@@ -34,7 +34,7 @@ class ClientService {
             self::$client = $client;
 
         }
-        return self::$client;
+        return new ApiRequestBuilder(self::$projectKey, self::$client);
     }
     public function getImportClient(){
         if (is_null(self::$client)) {
@@ -50,7 +50,7 @@ class ClientService {
             self::$client = $client;
 
         }
-        return self::$client;
+        return new ImportRequestBuilder(self::$projectKey, self::$client);
     }
     public function getStoreClient()
     {
@@ -67,22 +67,7 @@ class ClientService {
             self::$client = $client;
 
         }
-        return self::$client;
-    }
-    public function getApiBuilder()
-    {
-        $client = $this->getApiClient();
-        return new ApiRequestBuilder(self::$projectKey, $client);
-    }
-    public function getImportBuilder()
-    {
-        $client = $this->getImportClient();
-        return new ImportRequestBuilder(self::$projectKey, $client);
-    }
-    public function getStoreBuilder()
-    {
-        $client = $this->getStoreClient();
-        return new ApiRequestBuilder(self::$projectKey, $client);
+        return new ApiRequestBuilder(self::$projectKey, self::$client);
     }
     
 }

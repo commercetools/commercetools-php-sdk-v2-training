@@ -10,10 +10,21 @@ class StoreService extends ClientService
 
     public function getCustomersInAStore($storeKey)
     {
-        $builder = $this->getStoreBuilder();
-        $request = $builder->with()->inStoreKeyWithStoreKeyValue($storeKey)->customers()->get();
-        $response = $request->execute();
+        $apiRoot = $this->getStoreClient();
+        return $apiRoot->with()
+            ->inStoreKeyWithStoreKeyValue($storeKey)
+            ->customers()
+            ->get()
+            ->execute();
+    }
 
-        return $response;
+    public function createInstoreCart($draft, $storeKey)
+    {
+        $apiRoot = $this->getStoreClient();
+        return $apiRoot->with()
+            ->inStoreKeyWithStoreKeyValue($storeKey)
+            ->carts()
+            ->post($draft)
+            ->execute();
     }
 }

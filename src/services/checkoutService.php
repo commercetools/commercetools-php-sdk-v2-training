@@ -13,85 +13,96 @@ class CheckoutService extends ClientService
 
     public function createCart($draft)
     {
-        $builder = $this->getApiBuilder();
-        $request = $builder->with()->carts()->post($draft);
-        $response = $request->execute();
-
-        return $response;
+        $apiRoot = $this->getApiClient();
+        return $apiRoot->with()
+            ->carts()
+            ->post($draft)
+            ->execute();
     }
 
-    public function getCartById($id)
+    public function getCartById($cartId)
     {
-        $builder = $this->getApiBuilder();
-        $request = $builder->with()->carts()->withId($id)->get();
-        $response = $request->execute();
-
-        return $response;
+        $apiRoot = $this->getApiClient();
+        return $apiRoot->with()
+            ->carts()
+            ->withId($cartId)
+            ->get()
+            ->execute();
     }
 
-    public function updateCart($actionCollection, $id)
+    public function updateCart($cartId, $actionCollection)
     {
-        $cart = $this->getCartById($id);
+        $cart = $this->getCartById($cartId);
 
-        $builder = $this->getApiBuilder();
+        $apiRoot = $this->getApiClient();
+
         $updateBuilder = new CartUpdateBuilder();
-        $updateBuilder = $updateBuilder->withVersion($cart->getVersion())->withActions($actionCollection)->build();
+        $updateBuilder = $updateBuilder
+            ->withVersion($cart->getVersion())
+            ->withActions($actionCollection)
+            ->build();
 
-        $request = $builder->with()->carts()->withId($id)->post($updateBuilder);
-        $response = $request->execute();
-
-        return $response;
+        return $apiRoot->with()
+            ->carts()
+            ->withId($cartId)
+            ->post($updateBuilder)
+            ->execute();
     }
 
     public function createOrderFromCart($draft)
     {
 
-        $builder = $this->getApiBuilder();
-        $request = $builder->with()->orders()->post($draft);
-        $response = $request->execute();
-
-        return $response;
+        $apiRoot = $this->getApiClient();
+        return $apiRoot->with()
+            ->orders()
+            ->post($draft)
+            ->execute();
     }
 
-    public function getOrderById($id)
+    public function getOrderById($orderId)
     {
-        $builder = $this->getApiBuilder();
-        $request = $builder->with()->orders()->withId($id)->get();
-        $response = $request->execute();
-
-        return $response;
+        $apiRoot = $this->getApiClient();
+        return $apiRoot->with()
+            ->orders()
+            ->withId($orderId)
+            ->get()
+            ->execute();
     }
 
-    public function updateOrder($actionCollection, $id)
+    public function updateOrder($orderId, $actionCollection)
     {
-        $order = $this->getOrderById($id);
+        $order = $this->getOrderById($orderId);
 
-        $builder = $this->getApiBuilder();
-        $updateBuilder = new OrderUpdateBuilder();
-        $updateBuilder = $updateBuilder->withVersion($order->getVersion())->withActions($actionCollection)->build();
+        $apiRoot = $this->getApiClient();
+        
+        $orderUpdate = (new OrderUpdateBuilder())
+            ->withVersion($order->getVersion())
+            ->withActions($actionCollection)
+            ->build();
 
-        $request = $builder->with()->orders()->withId($id)->post($updateBuilder);
-        $response = $request->execute();
-
-        return $response;
+        return $apiRoot->with()
+            ->orders()
+            ->withId($orderId)
+            ->post($orderUpdate)
+            ->execute();
     }
 
-    public function createPayment($draft)
+    public function createPayment($paymentDraft)
     {
 
-        $builder = $this->getApiBuilder();
-        $request = $builder->with()->payments()->post($draft);
-        $response = $request->execute();
-
-        return $response;
+        $apiRoot = $this->getApiClient();
+        return $apiRoot->with()
+            ->payments()
+            ->post($paymentDraft)
+            ->execute();
     }
 
-    public function customerSignIn($draft)
+    public function customerSignIn($customerSignIn)
     {
-        $builder = $this->getApiBuilder();
-        $request = $builder->with()->login()->post($draft);
-        $response = $request->execute();
-
-        return $response;
+        $apiRoot = $this->getApiClient();
+        return $apiRoot->with()
+            ->login()
+            ->post($customerSignIn)
+            ->execute();
     }
 }

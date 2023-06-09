@@ -12,63 +12,74 @@ use Commercetools\Api\Models\Common\BaseAddressBuilder;
 use Commercetools\Api\Models\Order\OrderUpdateActionCollection;
 use Commercetools\Api\Models\Order\OrderChangeOrderStateActionBuilder;
 use Commercetools\Api\Models\Order\OrderAddPaymentActionBuilder;
+use Commercetools\Api\Models\Payment\PaymentMethodInfoBuilder;
 use Commercetools\Api\Models\Payment\PaymentResourceIdentifierBuilder;
 use Commercetools\Api\Models\Payment\PaymentDraftBuilder;
 use Commercetools\Api\Models\Customer\CustomerResourceIdentifierBuilder;
 use Commercetools\Api\Models\Common\MoneyBuilder;
 use Commercetools\Api\Models\Customer\CustomerSigninBuilder;
+use Commercetools\Api\Models\Common\LocalizedStringBuilder;
 
 
 include 'services/checkoutService.php';
+include 'services/customerService.php';
 
+$customerKey = '';
+$cartId = '';
+$orderId = '';
 
-print_r(cartMergingSimulation());
+print_r(fullCheckoutSimulation($customerKey, 'EUR'));
 
-function createCart()
+function createCart($customerKey, $currencyCode)
 {
     $checkoutService = new CheckoutService();
-    $currency='EUR';
-    $countryCode='DE';
-    $customerId='10cb16bf-a5d8-4f47-b664-fe5cae2f75d0';
+    $customerService = new CustomerService();
 
-    $builder = CartDraftBuilder::of();
-    $draft = $builder->withCurrency($currency)
-    ->withCustomerId($customerId)
-    ->withShippingAddress(BaseAddressBuilder::of()->withCountry($countryCode)->build())
+    $countryCode='DE';
+
+    $customer = $customerService->getCustomerWithKey($customerKey);
+    
+    $cartDraft = (CartDraftBuilder::of())
+        ->withCurrency($currencyCode)
+        ->withCountry($countryCode)
+        ->withCustomerId($customer->getId())
+        ->withCustomerEmail($customer->getEmail())
+        ->withDeleteDaysAfterLastModification(10)
+        ->withShippingAddress(
+            BaseAddressBuilder::of()
+                ->withCountry($countryCode)
+                ->build())
     ->build();
 
-    return $checkoutService->createCart($draft);
+    return $checkoutService->createCart($cartDraft);
 }
 
-function getCartById()
+function addLineItemsToCart($cartId, $arrayOfSkus)
 {
     $checkoutService = new CheckoutService();
-    $cartId = '2635a694-3286-4d6a-861a-77f2e51c6262';
-    return $checkoutService->getCartById($cartId);
-}
-
-function addLineItemsToCart($arrayOfSkus,$cartId)
-{
-    $checkoutService = new CheckoutService();
+    
     $actionCollection = CartUpdateActionCollection::of();
     foreach ($arrayOfSkus as $sku) {
-        $action = CartAddLineItemActionBuilder::of()->withSku($sku)->build();
-        $actionCollection = $actionCollection->add($action);
-    }
+        $action = CartAddLineItemActionBuilder::of()
+            ->withSku($sku)
+            ->build();
+        $actionCollection = $actionCollection->add($action);}
 
-    return $checkoutService->updateCart($actionCollection,$cartId);
+    return $checkoutService->updateCart($cartId, $actionCollection);
 }
 
-function addDiscountCodeToCart($code,$cartId)
+function addDiscountCodeToCart($cartId, $code)
 {
     $checkoutService = new CheckoutService();
     $actionCollection = CartUpdateActionCollection::of();
    
-        $action = CartAddDiscountCodeActionBuilder::of()->withCode($code)->build();
+        $action = CartAddDiscountCodeActionBuilder::of()
+            ->withCode($code)
+            ->build();
         $actionCollection = $actionCollection->add($action);
     
 
-    return $checkoutService->updateCart($actionCollection,$cartId);
+    return $checkoutService->updateCart($cartId, $actionCollection);
 }
 
 function createOrderFromCart($cartId)
@@ -76,106 +87,118 @@ function createOrderFromCart($cartId)
     $checkoutService = new CheckoutService();
     $cart = $checkoutService->getCartById($cartId);
     
-    $builder = OrderFromCartDraftBuilder::of();
-    $draft = $builder->withCart(CartResourceIdentifierBuilder::of()->withId($cartId)->build())
-    ->withVersion($cart->getVersion())
-    ->build();
+    $draft = (OrderFromCartDraftBuilder::of())
+        ->withCart(
+            CartResourceIdentifierBuilder::of()
+            ->withId($cartId)
+            ->build())
+        ->withVersion($cart->getVersion())
+        ->build();
 
     return $checkoutService->createOrderFromCart($draft);
 }
 
-function getOrderById()
-{
-    $checkoutService = new CheckoutService();
-    $orderId = '53d72533-863b-4e54-830a-b4cf62d75ed8';
-    return $checkoutService->getOrderById($orderId);
-}
-
-function updateOrderStatus($state,$orderId)
+function updateOrderStatus($orderId, $state)
 {
     $checkoutService = new CheckoutService();
     $actionCollection = OrderUpdateActionCollection::of();
 
-        $action = OrderChangeOrderStateActionBuilder::of()->withOrderState($state)->build();
+        $action = OrderChangeOrderStateActionBuilder::of()
+            ->withOrderState($state)
+            ->build();
         $actionCollection = $actionCollection->add($action);
-    
 
-    return $checkoutService->updateOrder($actionCollection,$orderId);
+    return $checkoutService->updateOrder($orderId, $actionCollection);
 }
 
-function createPayment()
+function createPayment($customerKey, $orderId)
 {
     $checkoutService = new CheckoutService();
-    $currency='EUR';
-    $amount='4200';
-    $customerId='10cb16bf-a5d8-4f47-b664-fe5cae2f75d0';
-
+    $order = $checkoutService->getOrderById($orderId);
+    
     $builder = PaymentDraftBuilder::of();
     $draft = $builder
-    ->withCustomer(
-        CustomerResourceIdentifierBuilder::of()->withId($customerId)->build()
-    )
-    ->withAmountPlanned(
-        MoneyBuilder::of()->withCentAmount($amount)
-        ->withCurrencyCode($currency)->build()
-    )
-    ->build();
-
+        ->withKey('nd-order-payment')
+        ->withCustomer(
+            CustomerResourceIdentifierBuilder::of()
+                ->withKey($customerKey)
+                ->build())
+        ->withAmountPlanned(
+            MoneyBuilder::of()
+                ->withCentAmount($order->getTotalPrice()->getCentAmount())
+                ->withCurrencyCode($order->getTotalPrice()->getCurrencyCode())
+                ->build())
+        ->withPaymentMethodInfo(
+            PaymentMethodInfoBuilder::of()
+                ->withPaymentInterface('PSP')
+                ->withMethod('Credit')
+                ->withName(LocalizedStringBuilder::of()
+                    ->put('en', 'nd payment')->build())
+                ->build()
+        )
+        ->build();
+        
     return $checkoutService->createPayment($draft);
 }
-function addPaymentToOrder($paymentId,$orderId)
+function addPaymentToOrder($orderId, $paymentId)
 {
     $checkoutService = new CheckoutService();
     $actionCollection = OrderUpdateActionCollection::of();
     
         $action = OrderAddPaymentActionBuilder::of()
-        ->withPayment(
-            PaymentResourceIdentifierBuilder::of()
-            ->withId($paymentId)->build()
-        )
-        ->build();
+            ->withPayment(
+                PaymentResourceIdentifierBuilder::of()
+                ->withId($paymentId)->build())
+            ->build();
         $actionCollection = $actionCollection->add($action);
     
-
-    return $checkoutService->updateOrder($actionCollection,$orderId);
+    return $checkoutService->updateOrder($orderId, $actionCollection);
 }
 
-function fullCheckoutSimulation()
+function fullCheckoutSimulation($customerKey, $currencyCode)
 {
-    $emptyCart = createCart();
+    $emptyCart = createCart($customerKey, $currencyCode);
 
-    $filledCart = addLineItemsToCart(['123','123'],$emptyCart->getId());
-    $filledCart = addDiscountCodeToCart('SUMMER',$filledCart->getId());
+    $filledCart = addLineItemsToCart($emptyCart->getId(), ['tulip-seed-box','tulip-seed-package']);
+    $filledCart = addDiscountCodeToCart($filledCart->getId(), 'TULIPS_BOGO');
 
-    $payment = createPayment();
     $order = createOrderFromCart($filledCart->getId());
-    $order = addPaymentToOrder($payment->getId(),$order->getId());
-    $order = updateOrderStatus('Confirmed',$order->getId());
+
+    // $payment = createPayment($customerKey, $order->getId());
+    // $order = addPaymentToOrder($order->getId(), $payment->getId());
+
+    $order = updateOrderStatus($order->getId(), 'Confirmed');
+    
     return $order;
     
 }
 
-function createAnonymousCart()
+function createAnonymousCart($currencyCode)
 {
     $checkoutService = new CheckoutService();
-    $currency='EUR';
     $countryCode='DE';
 
     $builder = CartDraftBuilder::of();
-    $draft = $builder->withCurrency($currency)
-    ->withShippingAddress(BaseAddressBuilder::of()->withCountry($countryCode)->build())
-    ->build();
+    $draft = $builder
+        ->withCurrency($currencyCode)
+        ->withCountry($countryCode)
+        ->withShippingAddress(
+            BaseAddressBuilder::of()
+                ->withCountry($countryCode)
+                ->build())
+        ->build();
 
     return $checkoutService->createCart($draft);
 }
 
-function cartMergingSimulation()
+function cartMergingSimulation($customerKey, $currencyCode)
 {
-    $emptyCustomerCart = createCart();
-    $emptyAnonymousCart = createAnonymousCart();
+    $emptyCustomerCart = createCart($customerKey, $currencyCode);
+    $filledCustomerCart = addLineItemsToCart($emptyCustomerCart->getId(), ['tulip-seed-box','tulip-seed-box']);
 
-    $filledAnonymousCart = addLineItemsToCart(['123','123'],$emptyAnonymousCart->getId());
-    $filledCustomerCart = addLineItemsToCart(['123'],$emptyCustomerCart->getId());
+    $emptyAnonymousCart = createAnonymousCart($currencyCode);
+    $filledAnonymousCart = addLineItemsToCart($emptyAnonymousCart->getId(), ['tulip-seed-box','tulip-seed-package']);
+    
 
     print_r($filledAnonymousCart->getId()); // look it up in impex you will see it's merged
     echo "\n";
@@ -183,10 +206,10 @@ function cartMergingSimulation()
     echo "\n";
     $checkoutService = new CheckoutService();
     $builder = CustomerSigninBuilder::of();
-    $draft = $builder->withEmail('persona1@example.com')
-    ->withPassword('123')
-    ->withAnonymousCartId($filledAnonymousCart->getId())
-    ->build();
+    $draft = $builder->withEmail('test.user@test.com')
+        ->withPassword('password')
+        ->withAnonymousCartId($filledAnonymousCart->getId())
+        ->withAnonymousCartSignInMode('UseAsNewActiveCustomerCart') //default is MergeWithExistingCustomerCart
+        ->build();
     return $checkoutService->customerSignIn($draft);
-    
 }

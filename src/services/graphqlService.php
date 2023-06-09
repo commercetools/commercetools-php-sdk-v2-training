@@ -10,31 +10,16 @@ include 'clientService.php';
 class GraphqlService extends ClientService
 {
 
-    public function getCustomersWithOrders()
+    public function postGraphQlQuery($query)
     {
-        $query = 'query {
-            orders {
-              results {
-                customer {
-                  email
-                }
-                lineItems {
-                  nameAllLocales {
-                    value
-                  }
-                }
-                totalPrice {
-                  centAmount
-                }
-              }
-            }
-          }';
+        $apiRoot = $this->getApiClient();
+        $gqlRequest = GraphQLRequestBuilder::of()
+          ->withQuery($query)
+          ->build();
 
-        $builder = $this->getApiBuilder();
-        $gqlRequest = GraphQLRequestBuilder::of()->withQuery($query)->build();
-        $request = $builder->with()->graphql()->post($gqlRequest);
-        $response = $request->execute();
-
-        return $response;
+        return $apiRoot->with()
+          ->graphql()
+          ->post($gqlRequest)
+          ->execute();
     }
 }
