@@ -23,11 +23,9 @@ function createNewCustomObject()
             "watering": "heavy"
         }
     }');
-    $draft = CustomObjectDraftBuilder::of()
-        ->withContainer("compatibility-info")
-        ->withKey("tulip-seed-product")
-        ->withValue($info)
-        ->build();
+    $draft = CustomObjectDraftBuilder::of();
+
+    // TODO create a custom object draft with the compatibility info above
 
     return $CustomizationService->createCustomObject($draft);
 }

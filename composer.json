@@ -16,7 +16,7 @@
         "8b": "php src/task8b-subscriptions.php"
     },
     "require": {
-        "commercetools/commercetools-sdk": "^9.5",
-        "vlucas/phpdotenv": "^5.3"
+        "commercetools/commercetools-sdk": "^9.5.0",
+        "vlucas/phpdotenv": "^5.5.0"
     }
 }

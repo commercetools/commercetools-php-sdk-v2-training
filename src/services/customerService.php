@@ -12,11 +12,7 @@ class CustomerService extends ClientService
 
     public function createCustomer($draft)
     {
-        $apiRoot = $this->getApiClient();
-        return $apiRoot->with()
-            ->customers()
-            ->post($draft)
-            ->execute();
+        
     }
 
     public function getAllCustomers()
@@ -40,30 +36,11 @@ class CustomerService extends ClientService
 
     public function getCustomerWithKey($customerKey)
     {
-        $apiRoot = $this->getApiClient();
-        return $apiRoot->with()
-            ->customers()
-            ->withKey($customerKey)
-            ->get()
-            ->execute();
+        
     }
 
     public function updateCustomer($customerKey, $actionCollection)
     {
-        $customer = $this->getCustomerWithKey($customerKey);
-
-        $apiRoot = $this->getApiClient();
         
-        $updateBuilder = new CustomerUpdateBuilder();
-        $customerUpdate = $updateBuilder
-            ->withVersion($customer->getVersion())
-            ->withActions($actionCollection)
-            ->build();
-
-        return $apiRoot->with()
-            ->customers()
-            ->withId($customer->getId())
-            ->post($customerUpdate)
-            ->execute();
     }
 }

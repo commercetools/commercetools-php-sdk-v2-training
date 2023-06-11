@@ -7,7 +7,7 @@ include 'services/importService.php';
 $containerKey = 'nd-import-products';
 $csvFile = '././products.csv';
 
-print_r(checkImportSummary($containerKey));
+print_r(createImportContainer($containerKey));
 
 function createImportContainer($containerKey)
 {

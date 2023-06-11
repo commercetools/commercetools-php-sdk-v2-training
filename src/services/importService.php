@@ -29,15 +29,7 @@ class ImportService extends ClientService
 
     public function createImportContainer($containerKey)
     {
-        $apiRoot = $this->getImportClient();
-        return $apiRoot->with()
-            ->importContainers()
-            ->post(
-                ImportContainerDraftBuilder::of()
-                    ->withKey($containerKey)
-                    ->build()
-            )
-            ->execute();
+        
     }
 
     
@@ -54,26 +46,7 @@ class ImportService extends ClientService
     }
     public function importProducts($containerKey, $csvFile)
     {
-        //productDraftImportBuilder
-        //productDraftImportCollection
-        //ProductDraftImportRequestBuilder
-        //ProductDraftImportRequestCollection
-        //ProductDraftImportRequest via clientBuilder
-        $productDraftImportCollection = $this->createImportProductDraftCollection($csvFile);
-        $productDraftImportRequest= ProductDraftImportRequestBuilder::of()
-            ->withResources(
-                $productDraftImportCollection
-            )
-            ->build();
         
-        $apiRoot = $this->getImportClient();
-        
-        return $apiRoot->with()
-            ->productDrafts()
-            ->importContainers()
-            ->withImportContainerKeyValue($containerKey)
-            ->post($productDraftImportRequest)
-            ->execute();
     }
     public function createImportProductDraftCollection($csvFile)
     {   

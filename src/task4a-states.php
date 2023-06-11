@@ -40,18 +40,6 @@ function createOrderWorkflow()
 
     $orderShippedState = $StateService->createState($orderShippedStateDraft);
 
-
-    $transitionState = StateResourceIdentifierBuilder::of()
-        ->withId($orderShippedState->getId())
-        ->build();
-    $transitionsCollection = StateResourceIdentifierCollection::of()
-        ->add($transitionState);
-    
-    $action = StateSetTransitionsActionBuilder::of()
-        ->withTransitions($transitionsCollection)
-        ->build();
-    $actionCollection = StateUpdateActionCollection::of()->add($action);
-
-    return $StateService->updateState($orderPackedState->getId(), $actionCollection);
+    // TODO update orderPacked state and set transition to orderShipped state
 }
 

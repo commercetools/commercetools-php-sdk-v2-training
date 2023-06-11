@@ -20,34 +20,9 @@ function createNewType()
 {
     $CustomizationService = new CustomizationService();
 
-    $draft = TypeDraftBuilder::of()
-        ->withKey('nd-allowed-to-place-orders')
-        ->withName(LocalizedStringBuilder::of()
-            ->put('en-US','nd customer custom fields')
-            ->build())
-        ->withResourceTypeIds(['customer'])
-        ->withFieldDefinitions(
-            FieldDefinitionCollection::of()
-                ->add(FieldDefinitionBuilder::of()
-                    ->withType(CustomFieldBooleanTypeBuilder::of()
-                        ->build())
-                    ->withName('allowed-to-place-orders')
-                    ->withLabel(LocalizedStringBuilder::of()
-                        ->put('en-US','Allowed to order?')
-                        ->build())
-                    ->withRequired(true)
-                    ->build())
-                ->add(FieldDefinitionBuilder::of()
-                    ->withType(CustomFieldStringTypeBuilder::of()
-                        ->build())
-                    ->withName('reason')
-                    ->withLabel(LocalizedStringBuilder::of()
-                        ->put('en-US','Reason')
-                        ->build())
-                    ->withRequired(true)
-                    ->build())
-            )
-        ->build();
+    $draft = TypeDraftBuilder::of();
+
+    // TODO create a type draft with custom fields
 
     return $CustomizationService->createType($draft);
 }

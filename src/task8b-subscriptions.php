@@ -13,8 +13,6 @@ include 'services/customizationService.php';
 
 print_r(createNewSubscription());
 
-
-
 function createNewSubscription()
 {
     $CustomizationService = new CustomizationService();

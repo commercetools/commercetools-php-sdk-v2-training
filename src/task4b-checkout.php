@@ -28,28 +28,19 @@ $customerKey = '';
 $cartId = '';
 $orderId = '';
 
-print_r(fullCheckoutSimulation($customerKey, 'EUR'));
+print_r(createCart($customerKey, 'EUR'));
 
 function createCart($customerKey, $currencyCode)
 {
     $checkoutService = new CheckoutService();
     $customerService = new CustomerService();
 
-    $countryCode='DE';
-
     $customer = $customerService->getCustomerWithKey($customerKey);
+    $countryCode='DE';
     
-    $cartDraft = (CartDraftBuilder::of())
-        ->withCurrency($currencyCode)
-        ->withCountry($countryCode)
-        ->withCustomerId($customer->getId())
-        ->withCustomerEmail($customer->getEmail())
-        ->withDeleteDaysAfterLastModification(10)
-        ->withShippingAddress(
-            BaseAddressBuilder::of()
-                ->withCountry($countryCode)
-                ->build())
-    ->build();
+    $cartDraft = CartDraftBuilder::of();
+
+    // TODO create cart
 
     return $checkoutService->createCart($cartDraft);
 }
@@ -57,15 +48,13 @@ function createCart($customerKey, $currencyCode)
 function addLineItemsToCart($cartId, $arrayOfSkus)
 {
     $checkoutService = new CheckoutService();
-    
+
     $actionCollection = CartUpdateActionCollection::of();
-    foreach ($arrayOfSkus as $sku) {
-        $action = CartAddLineItemActionBuilder::of()
-            ->withSku($sku)
-            ->build();
-        $actionCollection = $actionCollection->add($action);}
+   
+    // TODO create add line items to the cart action collection
 
     return $checkoutService->updateCart($cartId, $actionCollection);
+    
 }
 
 function addDiscountCodeToCart($cartId, $code)
@@ -73,11 +62,7 @@ function addDiscountCodeToCart($cartId, $code)
     $checkoutService = new CheckoutService();
     $actionCollection = CartUpdateActionCollection::of();
    
-        $action = CartAddDiscountCodeActionBuilder::of()
-            ->withCode($code)
-            ->build();
-        $actionCollection = $actionCollection->add($action);
-    
+    // TODO create add discount to the cart action collection
 
     return $checkoutService->updateCart($cartId, $actionCollection);
 }
@@ -87,13 +72,9 @@ function createOrderFromCart($cartId)
     $checkoutService = new CheckoutService();
     $cart = $checkoutService->getCartById($cartId);
     
-    $draft = (OrderFromCartDraftBuilder::of())
-        ->withCart(
-            CartResourceIdentifierBuilder::of()
-            ->withId($cartId)
-            ->build())
-        ->withVersion($cart->getVersion())
-        ->build();
+    $draft = OrderFromCartDraftBuilder::of();
+
+    // TODO create order from cart draft
 
     return $checkoutService->createOrderFromCart($draft);
 }
@@ -103,10 +84,7 @@ function updateOrderStatus($orderId, $state)
     $checkoutService = new CheckoutService();
     $actionCollection = OrderUpdateActionCollection::of();
 
-        $action = OrderChangeOrderStateActionBuilder::of()
-            ->withOrderState($state)
-            ->build();
-        $actionCollection = $actionCollection->add($action);
+    // TODO create order state update action collection
 
     return $checkoutService->updateOrder($orderId, $actionCollection);
 }

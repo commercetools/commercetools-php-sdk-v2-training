@@ -13,7 +13,7 @@ use Commercetools\Api\Models\CustomerGroup\CustomerGroupResourceIdentifierBuilde
 include 'services/customerService.php';
 
 
-print_r(setCustomerGroup('nd-customer', 'vip-customers'));
+print_r(createCustomer());
 
 function createCustomer()
 {
@@ -23,24 +23,7 @@ function createCustomer()
     $password='password';
     $customerKey='nd-customer';
     
-    $draft = CustomerDraftBuilder::of()
-        ->withKey($customerKey)
-        ->withEmail($email)
-        ->withPassword($password)
-        ->withFirstName('Test')
-        ->withLastName('User')
-        ->withAddresses(BaseAddressCollection::of()
-            ->add(BaseAddressBuilder::of()
-            ->withCountry('DE')
-            ->withFirstName('Test')
-            ->withLastName('User')
-            ->withKey('nd-customer-home')
-            ->build()))
-        ->withDefaultBillingAddress(0)
-        ->withDefaultShippingAddress(0)
-        ->build();
-
-    return $customerService->createCustomer($draft);
+    // TODO
 }
 
 function getAllCustomers()
@@ -60,25 +43,12 @@ function setCustomerFirstName($customerKey, $firstName)
 {
     $customerService = new customerService();
     
-    $action = CustomerSetFirstNameActionBuilder::of()
-        ->withFirstName($firstName)
-        ->build();
-    $actionCollection = CustomerUpdateActionCollection::of()->add($action);
-
-    return $customerService->updateCustomer($customerKey, $actionCollection);
+    // TODO
 }
 
 function setCustomerGroup($customerKey, $customerGroupKey)
 {
     $customerService = new customerService();
     
-    $action = CustomerSetCustomerGroupActionBuilder::of()
-        ->withCustomerGroup(
-            CustomerGroupResourceIdentifierBuilder::of()
-                ->withKey($customerGroupKey)
-                ->build())
-            ->build();
-    $actionCollection = CustomerUpdateActionCollection::of()->add($action);
-
-    return $customerService->updateCustomer($customerKey, $actionCollection);
+    // TODO
 }

@@ -12,14 +12,6 @@ class GraphqlService extends ClientService
 
     public function postGraphQlQuery($query)
     {
-        $apiRoot = $this->getApiClient();
-        $gqlRequest = GraphQLRequestBuilder::of()
-          ->withQuery($query)
-          ->build();
-
-        return $apiRoot->with()
-          ->graphql()
-          ->post($gqlRequest)
-          ->execute();
+        
     }
 }

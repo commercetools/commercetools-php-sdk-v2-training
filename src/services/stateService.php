@@ -39,19 +39,6 @@ class StateService extends ClientService
 
     public function updateState($id, $actionCollection)
     {
-        $state = $this->getStateWithId($id);
-
-        $apiRoot = $this->getApiClient();
-
-        $stateUpdate = (new StateUpdateBuilder())
-            ->withVersion($state->getVersion())
-            ->withActions($actionCollection)
-            ->build();
-
-        return $apiRoot->with()
-            ->states()
-            ->withId($id)
-            ->post($stateUpdate)
-            ->execute();
+        
     }
 }

@@ -16,22 +16,9 @@ function createNewExtension()
 {
     $CustomizationService = new CustomizationService();
     $extensionURL = 'https://europe-west3-ct-support.cloudfunctions.net/training-extensions-sample';
-    $draft = ExtensionDraftBuilder::of()
-            ->withKey('nd-orderChecker')
-            ->withDestination(
-                GoogleCloudFunctionDestinationBuilder::of()
-                    ->withUrl($extensionURL)
-                    ->build()
-            )
-            ->withTriggers(
-                ExtensionTriggerCollection::of()
-                ->add(
-                    ExtensionTriggerBuilder::of()
-                    ->withResourceTypeId('order')
-                    ->withActions(['Create'])
-                    ->build()
-                )
-            )->build();
+    $draft = ExtensionDraftBuilder::of();
+
+    // TODO create an extension draft with order create as the trigger
 
     return $CustomizationService->createExtension($draft);
 }

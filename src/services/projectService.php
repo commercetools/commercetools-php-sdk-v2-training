@@ -10,10 +10,6 @@ class ProjectService extends ClientService
 
     public function getProjectSettings()
     {
-        $apiRoot = $this->getApiClient();
         
-        return $apiRoot->with()
-            ->get()
-            ->execute();
     }
 }
