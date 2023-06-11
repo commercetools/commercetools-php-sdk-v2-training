@@ -2,7 +2,10 @@
 
 namespace Commercetools\Training;
 
+use Commercetools\Api\Models\Cart\CartBuilder;
 use Commercetools\Api\Models\Cart\CartUpdateBuilder;
+use Commercetools\Api\Models\Customer\CustomerSignInResult;
+use Commercetools\Api\Models\Order\OrderBuilder;
 use Commercetools\Api\Models\Order\OrderUpdateBuilder;
 
 include 'clientService.php';
@@ -13,7 +16,7 @@ class CheckoutService extends ClientService
 
     public function createCart($draft)
     {
-        
+        return CartBuilder::of();
     }
 
     public function getCartById($cartId)
@@ -28,13 +31,12 @@ class CheckoutService extends ClientService
 
     public function updateCart($cartId, $actionCollection)
     {
-        
+        return CartBuilder::of();
     }
 
     public function createOrderFromCart($draft)
     {
-
-        
+        return CartBuilder::of();
     }
 
     public function getOrderById($orderId)
@@ -49,7 +51,7 @@ class CheckoutService extends ClientService
 
     public function updateOrder($orderId, $actionCollection)
     {
-        
+        return OrderBuilder::of();
     }
 
     public function createPayment($paymentDraft)
@@ -64,6 +66,6 @@ class CheckoutService extends ClientService
 
     public function customerSignIn($customerSignIn)
     {
-        
+        return CustomerSignInResult::of();
     }
 }

@@ -1,7 +1,7 @@
 {
     "name": "commercetools/training",
     "scripts": {
-        "1a": "php src/task1-project-setup.php",
+        "1a": "php src/task1a-project-setup.php",
         "2a": "php src/task2a-customers.php",
         "3a": "php src/task3a-import.php",
         "4a": "php src/task4a-states.php",

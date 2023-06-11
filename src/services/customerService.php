@@ -2,6 +2,7 @@
 
 namespace Commercetools\Training;
 
+use Commercetools\Api\Models\Customer\CustomerBuilder;
 use Commercetools\Api\Models\Customer\CustomerUpdateBuilder;
 
 include_once 'clientService.php';
@@ -12,7 +13,7 @@ class CustomerService extends ClientService
 
     public function createCustomer($draft)
     {
-        
+        return CustomerBuilder::of();
     }
 
     public function getAllCustomers()
@@ -36,11 +37,11 @@ class CustomerService extends ClientService
 
     public function getCustomerWithKey($customerKey)
     {
-        
+        return CustomerBuilder::of();
     }
 
     public function updateCustomer($customerKey, $actionCollection)
     {
-        
+        return CustomerBuilder::of();
     }
 }

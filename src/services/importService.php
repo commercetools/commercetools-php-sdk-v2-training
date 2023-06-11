@@ -2,8 +2,10 @@
 
 namespace Commercetools\Training;
 
+use Commercetools\Import\Models\Importcontainers\ImportContainerBuilder;
 use Commercetools\Import\Models\Importcontainers\ImportContainerDraftBuilder;
 
+use Commercetools\Import\Models\Importrequests\ImportResponseBuilder;
 use Commercetools\Import\Models\Productdrafts\ProductDraftImportBuilder;
 use Commercetools\Import\Models\Productdrafts\ProductDraftImportCollection;
 use Commercetools\Import\Models\Productdrafts\ProductVariantDraftImportBuilder;
@@ -29,10 +31,9 @@ class ImportService extends ClientService
 
     public function createImportContainer($containerKey)
     {
-        
+        return ImportContainerBuilder::of();
     }
 
-    
     public function checkImportSummary($containerKey)
     {
 
@@ -46,7 +47,7 @@ class ImportService extends ClientService
     }
     public function importProducts($containerKey, $csvFile)
     {
-        
+        return ImportResponseBuilder::of();
     }
     public function createImportProductDraftCollection($csvFile)
     {   

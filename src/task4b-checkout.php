@@ -138,6 +138,7 @@ function fullCheckoutSimulation($customerKey, $currencyCode)
     $emptyCart = createCart($customerKey, $currencyCode);
 
     $filledCart = addLineItemsToCart($emptyCart->getId(), ['tulip-seed-box','tulip-seed-package']);
+    
     $filledCart = addDiscountCodeToCart($filledCart->getId(), 'TULIPS_BOGO');
 
     $order = createOrderFromCart($filledCart->getId());

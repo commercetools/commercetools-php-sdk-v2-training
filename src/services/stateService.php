@@ -2,6 +2,7 @@
 
 namespace Commercetools\Training;
 
+use Commercetools\Api\Models\State\StateBuilder;
 use Commercetools\Api\Models\State\StateUpdateBuilder;
 include 'clientService.php';
 
@@ -39,6 +40,6 @@ class StateService extends ClientService
 
     public function updateState($id, $actionCollection)
     {
-        
+        return StateBuilder::of();
     }
 }
